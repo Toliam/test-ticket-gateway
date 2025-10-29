@@ -1,178 +1,62 @@
-<?php
-
-namespace App\Services\LeadBook\Api;
-
-use App\Http\DTO\ReservePlacesDTO;
-use App\Services\LeadBook\DTO\JsonResponseDTO;
-use GuzzleHttp\Exception\RequestException;
-use HttpException;
-use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
-use RuntimeException;
-use Symfony\Component\HttpFoundation\Response;
-
-<?
-php
-
-namespace Tests\Feature;
-
-use App\Http\Controllers\ShowsListController;
-use App\Http\Requests\ShowListRequest;
-use App\Services\Shows\ShowsServiceInterface;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Collection;
-use Mockery;
-use Mockery\MockInterface;
-use Tests\TestCase;
-
-class ShowsListControllerTest extends TestCase
 {
-    use RefreshDatabase;
-
-    private ShowsServiceInterface|MockInterface $showsService;
-    private ShowsListController $controller;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->showsService = Mockery::mock(ShowsServiceInterface::class);
-        $this->controller = new ShowsListController($this->showsService);
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
-
-    /** @test */
-    public function it_returns_list_of_shows_successfully(): void
-    {
-        // Arrange
-        $expectedShows = collect([
-            [
-                'id' => 1,
-                'name' => 'Test Show 1',
-                'description' => 'Description 1',
-            ],
-            [
-                'id' => 2,
-                'name' => 'Test Show 2',
-                'description' => 'Description 2',
-            ],
-        ]);
-
-        $this->showsService
-            ->shouldReceive('getShows')
-            ->once()
-            ->andReturn($expectedShows);
-
-        $request = ShowListRequest::create('/shows', 'GET');
-
-        // Act
-        $response = $this->controller->__invoke($request);
-
-        // Assert
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $responseData = $response->getData(true);
-        $this->assertCount(2, $responseData);
-        $this->assertEquals($expectedShows->toArray(), $responseData);
-    }
-
-    /** @test */
-    public function it_returns_empty_collection_when_no_shows_available(): void
-    {
-        // Arrange
-        $this->showsService
-            ->shouldReceive('getShows')
-            ->once()
-            ->andReturn(collect([]));
-
-        $request = ShowListRequest::create('/shows', 'GET');
-
-        // Act
-        $response = $this->controller->__invoke($request);
-
-        // Assert
-        $this->assertInstanceOf(JsonResponse::class, $response);
-        $this->assertEquals(200, $response->getStatusCode());
-
-        $responseData = $response->getData(true);
-        $this->assertEmpty($responseData);
-    }
-
-    /** @test */
-    public function it_can_be_called_via_route(): void
-    {
-        // Arrange
-        $expectedShows = collect([
-            ['id' => 1, 'name' => 'Show 1'],
-        ]);
-
-        $this->instance(
-            ShowsServiceInterface::class,
-            Mockery::mock(ShowsServiceInterface::class, function (MockInterface $mock) use ($expectedShows) {
-                $mock->shouldReceive('getShows')
-                    ->once()
-                    ->andReturn($expectedShows);
-            })
-        );
-
-        // Act
-        $response = $this->getJson(route('shows.index'));
-
-        // Assert
-        $response->assertStatus(200);
-        $response->assertJson($expectedShows->toArray());
-    }
-
-    /** @test */
-    public function it_handles_service_exceptions_gracefully(): void
-    {
-        // Arrange
-        $this->showsService
-            ->shouldReceive('getShows')
-            ->once()
-            ->andThrow(new \RuntimeException('Service unavailable'));
-
-        $this->instance(ShowsServiceInterface::class, $this->showsService);
-
-        // Act
-        $response = $this->getJson(route('shows.index'));
-
-        // Assert
-        $response->assertStatus(500);
-    }
-
-    /** @test */
-    public function it_validates_request_using_show_list_request(): void
-    {
-        // Arrange
-        $expectedShows = collect([['id' => 1, 'name' => 'Test Show']]);
-
-        $this->instance(
-            ShowsServiceInterface::class,
-            Mockery::mock(ShowsServiceInterface::class, function (MockInterface $mock) use ($expectedShows) {
-                $mock->shouldReceive('getShows')
-                    ->once()
-                    ->andReturn($expectedShows);
-            })
-        );
-
-        // Act
-        $response = $this->getJson('/api/shows');
-
-        // Assert
-        $response->assertStatus(200);
-        $this->assertInstanceOf(ShowListRequest::class,
-            app()->make(ShowListRequest::class)
-        );
-    }
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": ["laravel", "framework"],
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^12.0"
+    },
+    "require-dev": {
+        "fakerphp/faker": "^1.23",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^11.5.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "setup": [
+            "composer install",
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
+            "@php artisan key:generate"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
+        ],
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
-
-
