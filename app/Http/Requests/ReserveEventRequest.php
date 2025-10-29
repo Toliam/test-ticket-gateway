@@ -5,6 +5,32 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * @OA\Schema(
+ *     schema="ReserveEventRequest",
+ *     type="object",
+ *     title="Reserve event request",
+ *     description="Reserve event request",
+ *     required={
+ *         "name",
+ *         "places",
+ *     },
+ *
+ *     @OA\Property(
+ *         property="name",
+ *         type="string",
+ *         description="User Name",
+ *         example="John Doe"
+ *     ),
+ *     @OA\Property(
+ *         property="places",
+ *         type="array",
+ *         description="List ids of the places for reservation",
+ *         @OA\Items(type="integer", example=1)
+ *     ),
+ * ),
+ *
+ */
 class ReserveEventRequest extends FormRequest
 {
     /**

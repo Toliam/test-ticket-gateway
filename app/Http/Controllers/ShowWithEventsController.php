@@ -17,8 +17,37 @@ class ShowWithEventsController extends Controller
     }
 
     /**
-     * @param int $showId
-     * @return JsonResource
+     * @OA\Get(
+     *     path="/api/shows/{showId}",
+     *     tags={"Shows"},
+     *     summary="Get Show with Events",
+     *     description="Get Show with Events.",
+     *
+     *     @OA\Parameter(
+     *         name="showId",
+     *         in="path",
+     *         description="Show id",
+     *         required=true,
+     *         example=1,
+     *
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Success",
+     *
+     *         @OA\JsonContent(ref="#/components/schemas/ShowResource")
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=404,
+     *         description="Not Found"
+     *     )
+     *
+     * )
      */
     public function __invoke(int $showId): JsonResource
     {

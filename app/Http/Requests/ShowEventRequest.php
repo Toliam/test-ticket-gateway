@@ -16,7 +16,7 @@ class ShowEventRequest extends FormRequest
     {
         return [
             'show_id' => 'required|integer|min:1',
-            'page' => 'integer|min:1',
+            // 'page' => 'integer|min:1',
         ];
     }
 }

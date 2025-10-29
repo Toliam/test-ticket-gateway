@@ -7,7 +7,7 @@
 ## How to start:
 1. `composer install`
 2. `cp .env.example .env`
-3. fill `.env` file (LEAD_BOOK_API_HOST and LEAD_BOOK_API_KEY)
+3. fill `.env` file (`LEAD_BOOK_API_HOST` and `LEAD_BOOK_API_KEY`)
 4. `php artisan key:generate`
 5. `php artisan serve`
 

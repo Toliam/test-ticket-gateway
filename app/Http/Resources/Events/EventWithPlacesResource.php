@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * @OA\Schema(
- *     schema="EventResource",
+ *     schema="EventWithPlacesResource",
  *     type="object",
  *     title="Event resource",
  *     description="Events resource",
@@ -28,16 +28,27 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *         type="string",
  *         description="Date in format YYYY-MM-DD",
  *         example="2022-12-22"
- *     )
+ *     ),
+ *     @OA\Property(
+ *          property="places",
+ *          type="array",
+ *          description="Places",
+ *
+ *          @OA\Items(
+ *              type="object",
+ *              ref="#/components/schemas/PlacesResource"
+ *          )
+ *      )
  * )
  */
-class EventResource extends JsonResource
+class EventWithPlacesResource extends JsonResource
 {
     public function toArray($request): array
     {
         return [
             'id' => $this->id,
             'date' => $this->date,
+            'places' => PlacesResource::collection($this->whenLoaded('places')),
         ];
     }
 }

@@ -1,0 +1,386 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "My First API",
+        "version": "0.1"
+    },
+    "paths": {
+        "/api/events/{eventId}": {
+            "get": {
+                "tags": [
+                    "Events"
+                ],
+                "summary": "Get Event with Places",
+                "description": "Get Event with Places.",
+                "operationId": "d6b87514cf37a2324965d9bd8f4c3596",
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "show_id",
+                        "in": "query",
+                        "description": "Show id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 123
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventWithPlacesResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Item Not Found"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Events"
+                ],
+                "summary": "Reserve Event with Places",
+                "description": "Reserve Event with Places.",
+                "operationId": "caedc80d5e02bf8bfa01b0bf2b6614cb",
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "path",
+                        "description": "Event id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "description": "Name and places for reservation",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ReserveEventRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ReservePlacesResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Item Not Found"
+                    }
+                }
+            }
+        },
+        "/api/shows/{showId}": {
+            "get": {
+                "tags": [
+                    "Shows"
+                ],
+                "summary": "Get Show with Events",
+                "description": "Get Show with Events.",
+                "operationId": "13b7204f16f8c421197e8b5cc4657b6b",
+                "parameters": [
+                    {
+                        "name": "showId",
+                        "in": "path",
+                        "description": "Show id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/api/shows": {
+            "get": {
+                "tags": [
+                    "Shows"
+                ],
+                "summary": "Get shows list",
+                "description": "This API endpoint returns a list of shows.",
+                "operationId": "9b1082b0c3479e7b71aaded118947115",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ShowListCollection"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ReserveEventRequest": {
+                "title": "Reserve event request",
+                "description": "Reserve event request",
+                "required": [
+                    "name",
+                    "places"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "User Name",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "places": {
+                        "description": "List ids of the places for reservation",
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "EventResource": {
+                "title": "Event resource",
+                "description": "Events resource",
+                "required": [
+                    "id",
+                    "date"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date": {
+                        "description": "Date in format YYYY-MM-DD",
+                        "type": "string",
+                        "example": "2022-12-22"
+                    }
+                },
+                "type": "object"
+            },
+            "EventWithPlacesResource": {
+                "title": "Event resource",
+                "description": "Events resource",
+                "required": [
+                    "id",
+                    "date"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "date": {
+                        "description": "Date in format YYYY-MM-DD",
+                        "type": "string",
+                        "example": "2022-12-22"
+                    },
+                    "places": {
+                        "description": "Places",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PlacesResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "PlacesResource": {
+                "title": "Places resource",
+                "description": "Places resource",
+                "required": [
+                    "id",
+                    "x",
+                    "y",
+                    "width",
+                    "height",
+                    "is_available"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "ID",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "x": {
+                        "description": "Coordinate X",
+                        "type": "number",
+                        "format": "float",
+                        "example": "45.33"
+                    },
+                    "y": {
+                        "description": "Coordinate Y",
+                        "type": "number",
+                        "format": "float",
+                        "example": "145.88"
+                    },
+                    "width": {
+                        "description": "Width",
+                        "type": "number",
+                        "format": "float",
+                        "example": "15.77"
+                    },
+                    "height": {
+                        "description": "Width",
+                        "type": "number",
+                        "format": "float",
+                        "example": "77.15"
+                    },
+                    "is_available": {
+                        "description": "Is this place available",
+                        "type": "boolean",
+                        "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "ReservePlacesResource": {
+                "title": "Reserve places resource",
+                "description": "Reserve places resource",
+                "properties": {
+                    "success": {
+                        "description": "Is store was successful",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "reservation_id": {
+                        "description": "External reservation id",
+                        "type": "string",
+                        "example": "6901e4e119c02"
+                    }
+                },
+                "type": "object"
+            },
+            "ShowListCollection": {
+                "title": "Show list",
+                "description": "List of shows",
+                "properties": {
+                    "data": {
+                        "title": "Show list",
+                        "description": "List of shows",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/ShowListResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "ShowListResource": {
+                "title": "Show list",
+                "description": "List of shows",
+                "required": [
+                    "id",
+                    "name"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "Id of show",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Title of the show",
+                        "type": "string",
+                        "example": "Show #1"
+                    }
+                },
+                "type": "object"
+            },
+            "ShowResource": {
+                "title": "Show resource",
+                "description": "Show resource",
+                "properties": {
+                    "id": {
+                        "description": "Show id",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "Title of the show",
+                        "type": "string",
+                        "example": "Show #1"
+                    },
+                    "events": {
+                        "description": "Events of the show",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/EventResource"
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Events",
+            "description": "Events"
+        },
+        {
+            "name": "Shows",
+            "description": "Shows"
+        }
+    ]
+}
