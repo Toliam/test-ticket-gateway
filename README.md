@@ -16,3 +16,6 @@
 - This allowed us to easily expand the functionality.
 - You can replace the gateway link in the .env file and the API key.
 
+## Swagger documentation:
+- [Swagger](http://localhost:8000/api/documentation)
+- OpenApi: storage/api-docs/api-docs.json
