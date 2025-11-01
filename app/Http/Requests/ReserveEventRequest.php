@@ -46,4 +46,14 @@ class ReserveEventRequest extends FormRequest
             'places.*' => 'required|integer|min:1|distinct',
         ];
     }
+
+    /**
+     * When true authorization is not required.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
 }

@@ -25,15 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
             ], HttpResponse::HTTP_NOT_FOUND);
         });
 
-        $exceptions->render(function (HttpException $e, Request $request) {
+        $exceptions->render(function (Symfony\Component\HttpKernel\Exception\HttpException $e, Request $request) {
             return response()->json([
                 'message' => $e->getMessage(),
-            ], HttpResponse::HTTP_BAD_REQUEST);
+            ], $e->getStatusCode());
         });
 
         $exceptions->render(function (AvailabilityException $e, Request $request) {
             return response()->json([
                 'message' => $e->getMessage(),
-            ], $e->getCode());
+            ], $e->getStatusCode());
         });
     })->create();

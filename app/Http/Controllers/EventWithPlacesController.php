@@ -20,7 +20,7 @@ class EventWithPlacesController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/events/{eventId}",
+     *     path="/api/events/{eventId}/places",
      *     tags={"Events"},
      *     summary="Get Event with Places",
      *     description="Get Event with Places.",
@@ -64,7 +64,7 @@ class EventWithPlacesController extends Controller
      */
     public function __invoke(int $eventId, ShowEventRequest $request): JsonResource
     {
-        // todo: without pagination because I do it in another place
+        // todo: without pagination because I do it in another place (time safe)
         // todo: we can't cache this because we want to have actual places for booking.
         $places = $this->placesService->getPlacesByEventId($eventId);
 

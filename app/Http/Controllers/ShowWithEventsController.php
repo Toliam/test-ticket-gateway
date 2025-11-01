@@ -18,7 +18,7 @@ class ShowWithEventsController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/shows/{showId}",
+     *     path="/api/shows/{showId}/events",
      *     tags={"Shows"},
      *     summary="Get Show with Events",
      *     description="Get Show with Events.",

@@ -37,10 +37,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Limit API requests to 100 requests per second per user or IP address
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perSecond(100)->by($request->user()?->id ?: $request->ip());
-        });
+        if (config('app.rate_limit.enabled')) {
+            // Limit API requests per second (per user or IP address)
+            RateLimiter::for('api', function (Request $request) {
+                return Limit::perSecond(config('app.rate_limit.attempts'))
+                    ->by($request->user()?->id ?: $request->ip());
+            });
+        }
 
         // Route ID only digits
         Route::pattern('showId', '[0-9]+');

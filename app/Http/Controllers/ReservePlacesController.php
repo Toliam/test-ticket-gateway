@@ -18,10 +18,10 @@ class ReservePlacesController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/events/{eventId}",
+     *     path="/api/events/{eventId}/places",
      *     tags={"Events"},
-     *     summary="Reserve Event with Places",
-     *     description="Reserve Event with Places.",
+     *     summary="Reserve Places on event.",
+     *     description="Reserve Places on event.",
      *
      *     @OA\Parameter(
      *         name="eventId",
@@ -37,14 +37,12 @@ class ReservePlacesController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         description="Name and places for reservation",
-     *
      *         @OA\JsonContent(ref="#/components/schemas/ReserveEventRequest")
      *     ),
      *
      *     @OA\Response(
      *         response=200,
      *         description="Success",
-     *
      *         @OA\JsonContent(ref="#/components/schemas/ReservePlacesResource")
      *     ),
      *
@@ -56,6 +54,7 @@ class ReservePlacesController extends Controller
      */
     public function __invoke(int $eventId, ReserveEventRequest $request): JsonResource
     {
+        // todo: think about idempotency key
         return new ReservePlacesResource($this->placesService->reserve(
             ReservePlacesDTO::fromRequest(array_merge($request->validated(), compact('eventId')))
         ));

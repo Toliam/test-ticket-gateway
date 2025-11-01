@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    'rate_limit' => [
+        'enabled' => env('RATE_LIMIT_ENABLED', true),
+        'attempts' => env('RATE_LIMIT_ATTEMPTS_PER_SECONDS', 30),
+    ]
+
 ];

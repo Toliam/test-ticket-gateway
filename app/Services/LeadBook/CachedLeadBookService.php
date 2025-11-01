@@ -48,7 +48,7 @@ readonly class CachedLeadBookService extends LeadBookService implements
         }
 
         $result = $fetchCallback();
-        Cache::put($cacheKey, $result->json, config('cache.ttl'));
+        Cache::put($cacheKey, $result->json, config('cache.ttl')); // ttl in seconds.
 
         return $result;
     }

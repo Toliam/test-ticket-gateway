@@ -6,7 +6,7 @@ namespace App\Services\LeadBook\Api;
 use App\Http\DTO\ReservePlacesDTO;
 use App\Services\LeadBook\DTO\JsonResponseDTO;
 use GuzzleHttp\Exception\RequestException;
-use HttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -48,6 +48,18 @@ readonly class LeadBookApiService implements LeadBookApiServiceInterface
     }
 
     /**
+     * @throws HttpException
+     */
+    public function storePlaces(ReservePlacesDTO $DTO): JsonResponseDTO
+    {
+        $url = "$this->apiHost/events/$DTO->eventId/reserve";
+
+        return $this->handleResponse(
+            fn() => $this->buildClient()->asMultipart()->post($url, $DTO->toArray())
+        );
+    }
+
+    /**
      * @param array $headers
      * @return PendingRequest
      */
@@ -73,16 +85,24 @@ readonly class LeadBookApiService implements LeadBookApiServiceInterface
     private function handleResponse(callable $httpCall): JsonResponseDTO
     {
         try {
+            /** @var \Illuminate\Http\Client\Response $response */
             $response = $httpCall();
         } catch (ConnectionException|RequestException $e) {
-            throw new HttpException($e->getMessage(), $e->getCode());
+            throw new HttpException(Response::HTTP_BAD_GATEWAY, 'LeadBook connection failed: '.$e->getMessage());
         }
 
         if ($response->successful()) {
             return new JsonResponseDTO($response->json('response'));
         }
 
-        throw new RuntimeException("Unknown error.", Response::HTTP_INTERNAL_SERVER_ERROR);
+        $status = $response->status();
+        $body = $response->json();
+
+        $message = is_array($body) && array_key_exists('error', $body)
+            ? (string) $body['error']
+            : ($response->body() ?: 'Unknown error');
+
+        throw new HttpException($status ?: Response::HTTP_BAD_GATEWAY, $message);
     }
 
     /**
@@ -96,18 +116,6 @@ readonly class LeadBookApiService implements LeadBookApiServiceInterface
     {
         return $this->handleResponse(
             fn() => $this->buildClient(['Content-Type' => 'application/json'])->get($url)
-        );
-    }
-
-    /**
-     * @throws HttpException
-     */
-    public function storePlaces(ReservePlacesDTO $DTO): JsonResponseDTO
-    {
-        $url = "$this->apiHost/events/$DTO->eventId/reserve";
-
-        return $this->handleResponse(
-            fn() => $this->buildClient()->asMultipart()->post($url, $DTO->toArray())
         );
     }
 }

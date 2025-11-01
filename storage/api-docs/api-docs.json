@@ -5,14 +5,14 @@
         "version": "0.1"
     },
     "paths": {
-        "/api/events/{eventId}": {
+        "/api/events/{eventId}/places": {
             "get": {
                 "tags": [
                     "Events"
                 ],
                 "summary": "Get Event with Places",
                 "description": "Get Event with Places.",
-                "operationId": "d6b87514cf37a2324965d9bd8f4c3596",
+                "operationId": "5016d2e9177a6f8a345cd3c42356a791",
                 "parameters": [
                     {
                         "name": "eventId",
@@ -55,9 +55,9 @@
                 "tags": [
                     "Events"
                 ],
-                "summary": "Reserve Event with Places",
-                "description": "Reserve Event with Places.",
-                "operationId": "caedc80d5e02bf8bfa01b0bf2b6614cb",
+                "summary": "Reserve Places on event.",
+                "description": "Reserve Places on event.",
+                "operationId": "9032f06136205310edee90ea272a3489",
                 "parameters": [
                     {
                         "name": "eventId",
@@ -98,14 +98,14 @@
                 }
             }
         },
-        "/api/shows/{showId}": {
+        "/api/shows/{showId}/events": {
             "get": {
                 "tags": [
                     "Shows"
                 ],
                 "summary": "Get Show with Events",
                 "description": "Get Show with Events.",
-                "operationId": "13b7204f16f8c421197e8b5cc4657b6b",
+                "operationId": "9c55e1b6de82c1798a87b7529a3baf56",
                 "parameters": [
                     {
                         "name": "showId",
@@ -212,6 +212,7 @@
                     "date": {
                         "description": "Date in format YYYY-MM-DD",
                         "type": "string",
+                        "format": "date",
                         "example": "2022-12-22"
                     }
                 },
@@ -233,6 +234,7 @@
                     "date": {
                         "description": "Date in format YYYY-MM-DD",
                         "type": "string",
+                        "format": "date",
                         "example": "2022-12-22"
                     },
                     "places": {

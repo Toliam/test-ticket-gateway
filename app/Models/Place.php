@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * Note: If we want to use DB in the future, I use models. If not, I will use DTOs.
+ *
  * @property int $id
  * @property float $x
  * @property float $y
@@ -16,8 +18,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Place extends Model
 {
+    public $timestamps = false;
+
+    protected $connection = 'array'; // remove when we use DB
+
     protected $fillable = [
-        'id',
+        'id', // remove when store to db, it will be an auto increment.
         'x',
         'y',
         'width',
@@ -25,7 +31,7 @@ class Place extends Model
         'is_available',
     ];
 
-    public function event(): belongsTo
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }

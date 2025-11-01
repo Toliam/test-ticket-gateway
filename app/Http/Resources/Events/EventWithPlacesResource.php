@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Resources\Events;
 
 use App\Http\Resources\Places\PlacesResource;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -25,7 +26,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     ),
  *     @OA\Property(
  *         property="date",
- *         type="string",
+ *         type="date",
  *         description="Date in format YYYY-MM-DD",
  *         example="2022-12-22"
  *     ),
@@ -47,7 +48,7 @@ class EventWithPlacesResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => $this->date,
+            'date' => Carbon::parse($this->date)->format('Y-m-d H:i:s'),
             'places' => PlacesResource::collection($this->whenLoaded('places')),
         ];
     }

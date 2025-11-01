@@ -5,7 +5,7 @@ namespace App\Services\Shows;
 
 use App\Models\Show;
 use App\Services\Shows\Repositories\ShowsRepositoryInterface;
-use Illuminate\Pagination\Paginator;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 readonly class ShowsService implements ShowsServiceInterface
@@ -15,19 +15,24 @@ readonly class ShowsService implements ShowsServiceInterface
     ) {
     }
 
-    public function getPaginated(?int $page, int $perPage = 10): Paginator
+    public function list(): Collection
+    {
+        $showsList = $this->showsRepository->getShowsList();
+
+        return collect($showsList->json)->map(static fn(array $show): Show => new Show($show));
+    }
+
+    public function getPaginated(?int $page, int $perPage = 10): LengthAwarePaginator
     {
         $shows = $this->list();
 
         $currentPage = max($page ?? 1, 1);
         $offset = ($currentPage - 1) * $perPage;
+        $items = array_slice($shows->all(), $offset, $perPage, true);
 
-        return new Paginator(
-            items: array_slice($shows->all(), $offset, $perPage, true),
-            perPage: $perPage,
-            currentPage: $currentPage,
-            options: ['path' => route('shows.index')],
-        );
+        return new LengthAwarePaginator($items, $shows->count(), $perPage, $currentPage, [
+            'path' => route('shows.index')
+        ]);
     }
 
     public function findShowWithEvents(int $id, Collection $events): Show
@@ -35,12 +40,5 @@ readonly class ShowsService implements ShowsServiceInterface
         $show = $this->list()->firstOrFail('id', $id);
 
         return $show->setRelation('events', $events);
-    }
-
-    public function list(): Collection
-    {
-        $showsList = $this->showsRepository->getShowsList();
-
-        return collect($showsList->json)->map(static fn(array $show): Show => new Show($show));
     }
 }

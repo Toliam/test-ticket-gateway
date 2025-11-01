@@ -19,3 +19,4 @@
 ## Swagger documentation:
 - [Swagger](http://localhost:8000/api/documentation)
 - OpenApi: storage/api-docs/api-docs.json
+- to generate api documentation from annotations use `php artisan l5-swagger:generate`

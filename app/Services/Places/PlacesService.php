@@ -27,6 +27,9 @@ readonly class PlacesService implements PlacesServiceInterface
 
     public function reserve(ReservePlacesDTO $DTO): ReserveResponseDTO
     {
+        // todo: think about race condition.
+        // When client 1 and client 2 in one time get places list -> together trying to reserve place #1.
+
         $places = $this->getPlacesByEventId($DTO->eventId);
 
         $this->checkAvailability($places, $DTO);
