@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 readonly class LeadBookApiService implements LeadBookApiServiceInterface
 {
-    private const DEFAULT_TIMEOUT = 10;
+    private const DEFAULT_TIMEOUT = 5;
     private const MAX_REDIRECTS = 3;
 
     private const RETRY_DELAYS = [100,200,300];
@@ -88,7 +88,7 @@ readonly class LeadBookApiService implements LeadBookApiServiceInterface
             /** @var \Illuminate\Http\Client\Response $response */
             $response = $httpCall();
         } catch (ConnectionException|RequestException $e) {
-            throw new HttpException(Response::HTTP_BAD_GATEWAY, 'LeadBook connection failed: '.$e->getMessage());
+            throw new HttpException(Response::HTTP_BAD_GATEWAY, 'LeadBook connection failed.');
         }
 
         if ($response->successful()) {
