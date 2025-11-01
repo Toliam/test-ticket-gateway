@@ -26,8 +26,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(
  *         property="date",
  *         type="date",
- *         description="Date in format YYYY-MM-DD",
- *         example="2022-12-22"
+ *         description="Date in format ISO 8601 (UTC)",
+ *         example="2025-11-11T13:06:16+00:00"
  *     )
  * )
  */
@@ -37,7 +37,7 @@ class EventResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'date' => Carbon::parse($this->date)->format('Y-m-d H:i:s'),
+            'date' => Carbon::parse($this->date)->utc()->toIso8601String(),
         ];
     }
 }

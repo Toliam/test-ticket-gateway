@@ -210,10 +210,10 @@
                         "example": 1
                     },
                     "date": {
-                        "description": "Date in format YYYY-MM-DD",
+                        "description": "Date in format ISO 8601 (UTC)",
                         "type": "string",
                         "format": "date",
-                        "example": "2022-12-22"
+                        "example": "2025-11-11T13:06:16+00:00"
                     }
                 },
                 "type": "object"
@@ -225,27 +225,35 @@
                     "id",
                     "date"
                 ],
-                "properties": {
-                    "id": {
-                        "description": "ID",
-                        "type": "integer",
-                        "example": 1
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/EventResource"
                     },
-                    "date": {
-                        "description": "Date in format YYYY-MM-DD",
-                        "type": "string",
-                        "format": "date",
-                        "example": "2022-12-22"
-                    },
-                    "places": {
-                        "description": "Places",
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/PlacesResource"
-                        }
+                    {
+                        "properties": {
+                            "id": {
+                                "description": "ID",
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "date": {
+                                "description": "Date in format ISO 8601 (UTC)",
+                                "type": "string",
+                                "format": "date",
+                                "example": "2025-11-11T13:06:16+00:00"
+                            },
+                            "places": {
+                                "description": "Places",
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/PlacesResource"
+                                }
+                            }
+                        },
+                        "type": "object"
                     }
-                },
-                "type": "object"
+                ]
             },
             "PlacesResource": {
                 "title": "Places resource",

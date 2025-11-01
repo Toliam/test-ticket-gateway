@@ -27,8 +27,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *     @OA\Property(
  *         property="date",
  *         type="date",
- *         description="Date in format YYYY-MM-DD",
- *         example="2022-12-22"
+ *         description="Date in format ISO 8601 (UTC)",
+ *         example="2025-11-11T13:06:16+00:00"
  *     ),
  *     @OA\Property(
  *          property="places",
@@ -42,14 +42,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *      )
  * )
  */
-class EventWithPlacesResource extends JsonResource
+class EventWithPlacesResource extends EventResource
 {
     public function toArray($request): array
     {
-        return [
-            'id' => $this->id,
-            'date' => Carbon::parse($this->date)->format('Y-m-d H:i:s'),
+        $eventData = parent::toArray($request);
+
+        $placesData = [
             'places' => PlacesResource::collection($this->whenLoaded('places')),
         ];
+
+        return array_merge($eventData, $placesData);
     }
 }
