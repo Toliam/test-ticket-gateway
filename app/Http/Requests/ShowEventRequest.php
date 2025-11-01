@@ -16,7 +16,16 @@ class ShowEventRequest extends FormRequest
     {
         return [
             'show_id' => 'required|integer|min:1',
-            // 'page' => 'integer|min:1',
         ];
+    }
+
+    /**
+     * When true authorization is not required.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return true;
     }
 }

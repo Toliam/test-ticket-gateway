@@ -45,10 +45,6 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        // Route ID only digits
-        Route::pattern('showId', '[0-9]+');
-        Route::pattern('eventId', '[0-9]+');
-
         // Without wrapping for all resources
         JsonResource::withoutWrapping();
     }

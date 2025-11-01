@@ -10,6 +10,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ShowsListController extends Controller
 {
+    public function __construct(
+        private readonly ShowsServiceInterface $showService,
+    ) {
+    }
+
     /**
      * @OA\Get(
      *     path="/api/shows",
@@ -37,9 +42,9 @@ class ShowsListController extends Controller
      *
      * )
      */
-    public function __invoke(ShowsServiceInterface $showService, ShowListRequest $request): JsonResource
+    public function __invoke(ShowListRequest $request): JsonResource
     {
-        return new ShowListCollection($showService->getPaginated(
+        return new ShowListCollection($this->showService->getPaginated(
             $request->integer('page', 1)
         ));
     }

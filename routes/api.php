@@ -12,11 +12,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'shows'], function () {
     Route::get('/', ShowsListController::class)->name('shows.index');
-    Route::get('/{showId}/events', ShowWithEventsController::class);
+    Route::get('/{showId}/events', ShowWithEventsController::class)
+        ->whereNumber('showId');
 });
 
 Route::group(['prefix' => 'events'], function () {
-    Route::get('/{eventId}/places', EventWithPlacesController::class);
-    Route::post('/{eventId}/places', ReservePlacesController::class);
+    Route::get('/{eventId}/places', EventWithPlacesController::class)
+        ->whereNumber('eventId');
+
+    Route::post('/{eventId}/places', ReservePlacesController::class)
+        ->whereNumber('eventId');
 });
 
